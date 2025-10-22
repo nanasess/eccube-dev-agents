@@ -16,7 +16,7 @@
     "slack",
     "automation"
   ],
-  "agents": "agents",
-  "commands": "commands",
-  "hooks": "hooks/hooks.json"
+  "agents": "./agents",
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json"
 }
