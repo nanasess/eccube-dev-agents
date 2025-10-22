@@ -15,5 +15,8 @@
     "github",
     "slack",
     "automation"
-  ]
+  ],
+  "agents": "agents",
+  "commands": "commands",
+  "hooks": "hooks/hooks.json"
 }
