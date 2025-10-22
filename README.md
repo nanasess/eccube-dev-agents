@@ -14,6 +14,7 @@ EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integrati
 ### ⚡ Custom Commands
 
 - **gemini-search** - Web search using Google Gemini CLI
+- **gemini** - Direct Gemini CLI interaction with custom prompts
 - **github-check** - View PR/Issue details with automatic number extraction
 - **github-logs-analyze** - Analyze failed GitHub Actions jobs
 - **generate-commit** - Generate commit messages from git diff
@@ -40,7 +41,7 @@ Automatic notifications to Slack:
 Install directly from GitHub:
 
 ```bash
-# Add the marketplace
+# Add the GitHub marketplace
 claude plugin marketplace add nanasess/eccube-dev-agents
 
 # Install the plugin
@@ -48,6 +49,24 @@ claude plugin install eccube-dev-agents
 ```
 
 **Restart Claude Code** to activate the plugin.
+
+### Alternative: Local Development Installation
+
+For plugin development or testing local modifications:
+
+```bash
+# Clone the repository to a local directory
+git clone https://github.com/nanasess/eccube-dev-agents.git /path/to/local/eccube-dev-agents
+
+# Add the local marketplace
+# Note: Point to the repository root directory containing .claude-plugin/marketplace.json
+claude plugin marketplace add /path/to/local/eccube-dev-agents
+
+# Install the plugin
+claude plugin install eccube-dev-agents
+```
+
+The repository uses a nested structure where the actual plugin contents are in `plugins/eccube-dev-agents/` subdirectory. The marketplace.json at the root configures this layout.
 
 ### Environment Setup
 
@@ -58,21 +77,6 @@ export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 ```
 
 Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
-
-### Alternative: Local Development Installation
-
-For plugin development or testing local modifications:
-
-```bash
-# Clone the repository
-git clone https://github.com/nanasess/eccube-dev-agents.git ~/claude-marketplace/eccube-dev-agents
-
-# Add local marketplace
-claude plugin marketplace add ~/claude-marketplace/eccube-dev-agents
-
-# Install the plugin
-claude plugin install eccube-dev-agents
-```
 
 ## Usage
 
@@ -97,6 +101,9 @@ claude plugin install eccube-dev-agents
 ```bash
 # Web search
 /gemini-search latest EC-CUBE 4.2 features
+
+# Direct Gemini interaction
+/gemini explain the difference between Doctrine and Eloquent
 
 # Check GitHub PR
 /github-check #450
@@ -132,22 +139,25 @@ Ensure the `gemini` command is available in your PATH. If it's installed in a cu
 ```
 eccube-dev-agents/
 ├── .claude-plugin/
-│   ├── plugin.json          # Plugin metadata
-│   └── marketplace.json     # Marketplace configuration
-├── agents/                   # AI agent definitions
-│   ├── implementation-analyzer.md
-│   ├── bug-investigator.md
-│   ├── log-analyzer.md
-│   └── refactoring-expert.md
-├── commands/                 # Custom slash commands
-│   ├── gemini-search.md
-│   ├── github-check.md
-│   ├── github-logs-analyze.md
-│   ├── generate-commit.md
-│   └── update-pr-description.md
-├── hooks/
-│   └── hooks.json           # Event hooks configuration
-├── CLAUDE.md                 # Plugin development guide
+│   └── marketplace.json              # Local marketplace configuration
+├── plugins/eccube-dev-agents/        # Plugin contents
+│   ├── .claude-plugin/
+│   │   └── plugin.json               # Plugin metadata
+│   ├── agents/                       # AI agent definitions
+│   │   ├── implementation-analyzer.md
+│   │   ├── bug-investigator.md
+│   │   ├── log-analyzer.md
+│   │   └── refactoring-expert.md
+│   ├── commands/                     # Custom slash commands
+│   │   ├── gemini-search.md
+│   │   ├── gemini.md
+│   │   ├── github-check.md
+│   │   ├── github-logs-analyze.md
+│   │   ├── generate-commit.md
+│   │   └── update-pr-description.md
+│   └── hooks/
+│       └── hooks.json                # Event hooks configuration
+├── CLAUDE.md                          # Plugin development guide
 └── README.md
 ```
 

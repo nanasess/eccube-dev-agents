@@ -19,6 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - スラッシュコマンドとして実行可能なMarkdownファイル
    - `$ARGUMENTS`変数を使用した動的パラメータ置換
    - 外部CLIツール（gemini, gh）との統合
+   - 6つのコマンド: gemini-search, gemini, github-check, github-logs-analyze, generate-commit, update-pr-description
 
 3. **Event Hooks** (`hooks/hooks.json`)
    - `Notification`と`Stop`イベントに対応
@@ -103,17 +104,20 @@ cat commands/github-check.md
 
 ### 配布とインストール
 
+このプラグインは **ネストされた構造** を使用しています：
+- リポジトリルート: `.claude-plugin/marketplace.json` でマーケットプレイス設定
+- プラグイン本体: `plugins/eccube-dev-agents/` サブディレクトリ内
+
 ```bash
-# ローカルマーケットプレイス経由
-mkdir -p ~/claude-plugins-marketplace
-cp -r . ~/claude-plugins-marketplace/eccube-dev-agents
+# ローカルマーケットプレイス経由でのテスト
+# リポジトリルートディレクトリを指定
+claude plugin marketplace add /path/to/eccube-dev-agents
+claude plugin install eccube-dev-agents
 
-# marketplace.json作成（親ディレクトリ）
-# claude plugin marketplace add ~/claude-plugins-marketplace
+# GitHub経由での配布
+# リポジトリを公開してGitHub URLでインストール可能
+# claude plugin marketplace add nanasess/eccube-dev-agents
 # claude plugin install eccube-dev-agents
-
-# GitHub経由での配布も可能
-# gh repo create eccube-dev-agents --public
 ```
 
 ## 技術的な重要事項
