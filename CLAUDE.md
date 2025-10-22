@@ -46,7 +46,7 @@ color: blue|red|green|...
 - `description`フィールドには使用例を含める（`<example>`タグ）
 - プロンプトは段階的な調査手順を明示（番号付きリスト）
 - EC-CUBE/Symfony固有の知識を含める
-- 常に日本語で結果を報告（`implementation-analyzer`のみ）
+- 常に日本語で結果を報告（全エージェント共通）
 
 ### コマンド設計パターン
 
