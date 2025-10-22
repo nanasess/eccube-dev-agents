@@ -1,13 +1,18 @@
 {
-  "name": "eccube-dev-agents",
-  "description": "EC-CUBE/Symfony development toolkit marketplace - Comprehensive development tools optimized for EC-CUBE/Symfony but applicable to any project",
+  "name": "local-dev-marketplace",
+  "description": "Local marketplace for development plugins",
   "owner": {
     "name": "nanasess"
   },
   "plugins": [
     {
       "name": "eccube-dev-agents",
-      "source": "./"
+      "source": "./plugins/eccube-dev-agents",
+      "description": "Comprehensive development toolkit optimized for EC-CUBE/Symfony but applicable to any project. Includes specialized AI agents, Gemini integration, GitHub automation, and Slack notifications",
+      "version": "1.0.0",
+      "author": {
+        "name": "nanasess"
+      }
     }
   ]
 }
