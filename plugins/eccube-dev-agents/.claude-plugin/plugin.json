@@ -15,20 +15,5 @@
     "github",
     "slack",
     "automation"
-  ],
-  "agents": [
-    "./agents/bug-investigator.md",
-    "./agents/implementation-analyzer.md",
-    "./agents/log-analyzer.md",
-    "./agents/refactoring-expert.md"
-  ],
-  "commands": [
-    "./commands/gemini-search.md",
-    "./commands/gemini.md",
-    "./commands/generate-commit.md",
-    "./commands/github-check.md",
-    "./commands/github-logs-analyze.md",
-    "./commands/update-pr-description.md"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }
