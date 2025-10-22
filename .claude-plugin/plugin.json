@@ -1,0 +1,19 @@
+{
+  "name": "eccube-dev-agents",
+  "description": "Comprehensive development toolkit optimized for EC-CUBE/Symfony but applicable to any project. Includes specialized AI agents, Gemini integration, GitHub automation, and Slack notifications",
+  "version": "1.0.0",
+  "author": {
+    "name": "nanasess"
+  },
+  "homepage": "https://github.com/nanasess/eccube-dev-agents",
+  "keywords": [
+    "eccube",
+    "symfony",
+    "development",
+    "agents",
+    "gemini",
+    "github",
+    "slack",
+    "automation"
+  ]
+}
