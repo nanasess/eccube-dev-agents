@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "eccube-dev-agents",
-      "source": "."
+      "source": "./"
     }
   ]
 }
