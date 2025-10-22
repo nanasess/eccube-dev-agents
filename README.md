@@ -35,7 +35,21 @@ Automatic notifications to Slack:
 
 ## Installation
 
-### 1. Set up environment variables
+### Quick Start (Recommended)
+
+Install directly from GitHub:
+
+```bash
+# Add the marketplace
+claude plugin marketplace add nanasess/eccube-dev-agents
+
+# Install the plugin
+claude plugin install eccube-dev-agents
+```
+
+**Restart Claude Code** to activate the plugin.
+
+### Environment Setup
 
 For Slack notifications to work, set your Slack webhook URL:
 
@@ -45,51 +59,20 @@ export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
 Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 
-### 2. Install via local marketplace
+### Alternative: Local Development Installation
 
-Create a local marketplace:
-
-```bash
-mkdir -p ~/claude-plugins-marketplace
-cd ~/claude-plugins-marketplace
-```
-
-Clone or copy this plugin:
+For plugin development or testing local modifications:
 
 ```bash
-# If using git
-git clone https://github.com/nanasess/eccube-dev-agents.git
+# Clone the repository
+git clone https://github.com/nanasess/eccube-dev-agents.git ~/claude-marketplace/eccube-dev-agents
 
-# Or copy from your existing location
-cp -r ~/.config/claude/plugins/eccube-dev-agents .
-```
+# Add local marketplace
+claude plugin marketplace add ~/claude-marketplace/eccube-dev-agents
 
-Create `marketplace.json`:
-
-```json
-{
-  "plugins": [
-    {
-      "name": "eccube-dev-agents",
-      "source": "./eccube-dev-agents"
-    }
-  ]
-}
-```
-
-Add marketplace to Claude Code:
-
-```bash
-claude plugin marketplace add ~/claude-plugins-marketplace
-```
-
-Install the plugin:
-
-```bash
+# Install the plugin
 claude plugin install eccube-dev-agents
 ```
-
-Restart Claude Code to activate the plugin.
 
 ## Usage
 
@@ -149,7 +132,8 @@ Ensure the `gemini` command is available in your PATH. If it's installed in a cu
 ```
 eccube-dev-agents/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin metadata
+│   ├── plugin.json          # Plugin metadata
+│   └── marketplace.json     # Marketplace configuration
 ├── agents/                   # AI agent definitions
 │   ├── implementation-analyzer.md
 │   ├── bug-investigator.md
@@ -163,6 +147,7 @@ eccube-dev-agents/
 │   └── update-pr-description.md
 ├── hooks/
 │   └── hooks.json           # Event hooks configuration
+├── CLAUDE.md                 # Plugin development guide
 └── README.md
 ```
 

@@ -1,0 +1,13 @@
+{
+  "name": "eccube-dev-agents",
+  "description": "EC-CUBE/Symfony development toolkit marketplace - Comprehensive development tools optimized for EC-CUBE/Symfony but applicable to any project",
+  "owner": {
+    "name": "nanasess"
+  },
+  "plugins": [
+    {
+      "name": "eccube-dev-agents",
+      "source": "."
+    }
+  ]
+}
