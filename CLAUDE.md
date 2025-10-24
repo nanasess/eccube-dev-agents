@@ -84,7 +84,7 @@ color: blue|red|green|...
 
 3. **フック設定**
    - `hooks/hooks.json`でイベントハンドラーを定義
-   - 環境変数`SLACK_WEBHOOK_URL`が必要
+   - 環境変数`ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL`が必要
 
 ### テストとデバッグ
 
@@ -131,7 +131,7 @@ claude plugin install eccube-dev-agents
 
 ### 環境変数
 
-- `SLACK_WEBHOOK_URL`: Slack通知に必須
+- `ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL`: Slack通知に必須
 
 ### ファイル形式
 

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "transcript_path=$(jq -r '.transcript_path') && title=$(jq -r '.title') && jq -s '.[-3:]' \"$transcript_path\" | gemini -m gemini-2.5-flash -p \"タスク確認の通知です。タイトル: $title\\nこの会話の内容を日本語で簡潔に要約してください。絵文字を使って読みやすくしてください。Slack の mrkdwn 形式を使用してください。\" | jq -Rs '{\"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": .}}]}' | curl -X POST -H 'Content-type: application/json' -d @- ${SLACK_WEBHOOK_URL}"
+            "command": "transcript_path=$(jq -r '.transcript_path') && title=$(jq -r '.title') && jq -s '.[-3:]' \"$transcript_path\" | gemini -m gemini-2.5-flash -p \"タスク確認の通知です。タイトル: $title\\nこの会話の内容を日本語で簡潔に要約してください。絵文字を使って読みやすくしてください。Slack の mrkdwn 形式を使用してください。\" | jq -Rs '{\"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": .}}]}' | curl -X POST -H 'Content-type: application/json' -d @- ${ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL}"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "transcript_path=$(jq -r '.transcript_path') && jq -s '.[-3:]' \\\"$transcript_path\\\" | gemini -m gemini-2.5-flash -p 'タスク完了の通知です。この会話の内容を日本語で簡潔に要約してください。絵文字を使って読みやすくしてください。Slack の mrkdwn 形式を使用してください。' | jq -Rs '{\\\"blocks\\\": [{\\\"type\\\": \\\"section\\\", \\\"text\\\": {\\\"type\\\": \\\"mrkdwn\\\", \\\"text\\\": .}}]}' | curl -X POST -H 'Content-type: application/json' -d @- ${SLACK_WEBHOOK_URL}"
+            "command": "transcript_path=$(jq -r '.transcript_path') && jq -s '.[-3:]' \\\"$transcript_path\\\" | gemini -m gemini-2.5-flash -p 'タスク完了の通知です。この会話の内容を日本語で簡潔に要約してください。絵文字を使って読みやすくしてください。Slack の mrkdwn 形式を使用してください。' | jq -Rs '{\\\"blocks\\\": [{\\\"type\\\": \\\"section\\\", \\\"text\\\": {\\\"type\\\": \\\"mrkdwn\\\", \\\"text\\\": .}}]}' | curl -X POST -H 'Content-type: application/json' -d @- ${ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL}"
           }
         ]
       }
