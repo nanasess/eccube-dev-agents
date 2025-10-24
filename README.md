@@ -73,7 +73,7 @@ The repository uses a nested structure where the actual plugin contents are in `
 For Slack notifications to work, set your Slack webhook URL:
 
 ```bash
-export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+export ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 ```
 
 Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
