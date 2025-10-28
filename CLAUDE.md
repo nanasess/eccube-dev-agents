@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - スラッシュコマンドとして実行可能なMarkdownファイル
    - `$ARGUMENTS`変数を使用した動的パラメータ置換
    - 外部CLIツール（gemini, gh）との統合
-   - 6つのコマンド: gemini-search, gemini, github-check, github-logs-analyze, generate-commit, update-pr-description
+   - 7つのコマンド: gemini-search, gemini, github-check, github-logs-analyze, generate-commit, update-pr-description, create-pr
 
 3. **Event Hooks** (`hooks/hooks.json`)
    - `Notification`と`Stop`イベントに対応

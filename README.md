@@ -19,6 +19,7 @@ EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integrati
 - **github-logs-analyze** - Analyze failed GitHub Actions jobs
 - **generate-commit** - Generate commit messages from git diff
 - **update-pr-description** - Auto-update PR descriptions based on changes
+- **create-pr** - Create PRs with template support, remote sync check, and argument parsing
 
 ### 🔔 Slack Notifications
 
@@ -116,6 +117,13 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 
 # Update PR description
 /update-pr-description
+
+# Create pull request
+/create-pr
+
+# Create PR with options
+/create-pr --repo upstream/repo --base develop
+/create-pr --draft
 ```
 
 ## Configuration
@@ -154,7 +162,8 @@ eccube-dev-agents/
 │   │   ├── github-check.md
 │   │   ├── github-logs-analyze.md
 │   │   ├── generate-commit.md
-│   │   └── update-pr-description.md
+│   │   ├── update-pr-description.md
+│   │   └── create-pr.md
 │   └── hooks/
 │       └── hooks.json                # Event hooks configuration
 ├── CLAUDE.md                          # Plugin development guide
