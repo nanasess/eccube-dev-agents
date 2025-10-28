@@ -37,7 +37,7 @@ $ARGUMENTS (オプション) - 以下の形式で指定可能：
 ### 2. Remote同期確認
 
 1. `git rev-parse HEAD` でローカルの最新コミットを取得
-2. `git ls-remote origin <branch>` でリモートの最新コミットを取得
+2. `git fetch origin <branch>` でリモートの情報を更新し、`git rev-parse origin/<branch>` でリモートの最新コミットを取得（`git ls-remote origin <branch>` でも取得可能だが、出力からSHAを抽出する必要があるため、`git rev-parse`の方が直接的）
 3. `git rev-list HEAD...origin/<branch>` でpush待ちのコミット数を確認
 4. push待ちのコミットがある場合：
    - コミット一覧を表示
