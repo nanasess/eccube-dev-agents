@@ -9,9 +9,10 @@
 2. ステージングされたファイルがない場合は、未追跡ファイルを確認して追加を提案
 3. ステージングされた変更を分析して、何が変更されたかを理解
 4. 以下の観点から適切なコミットメッセージを生成：
-   - 変更の種類（feat, fix, docs, refactor, test など）
-   - 影響を受けるファイル/コンポーネント
-   - 変更の内容
+   - 変更の種類（feat, fix, docs, refactor, test, chore など）
+   - スコープ（影響を受けるファイル/コンポーネント）を括弧で追加
+   - 変更の内容を簡潔に記述
+   - 破壊的変更がある場合は "!" または "BREAKING CHANGE:" を追加
 5. 生成されたメッセージでコミットを作成
 
 ## 引数
@@ -23,10 +24,16 @@ $ARGUMENTS (オプション) - 追加のコンテキストや特定のコミッ�
 1. `git status` を実行して現在の状態を確認
 2. `git diff --staged` を実行して変更内容を分析
 3. 分析結果に基づいて：
-   - 新規ファイル: ファイルタイプに応じて "feat:" または "docs:" プレフィックスを使用
-   - 変更: 変更内容を分析してfix、enhancement、refactorのいずれかを判断
-   - 削除: "remove:" または "cleanup:" プレフィックスを使用
-4. Conventional Commit形式に従った簡潔なコミットメッセージを生成
+   - 新規ファイル: "feat:" または "docs:" を使用
+   - バグ修正: "fix:" を使用
+   - リファクタリング: "refactor:" を使用
+   - パフォーマンス改善: "perf:" を使用
+   - テスト: "test:" を使用
+   - ビルド・依存関係: "build:" または "chore:" を使用
+   - 削除・クリーンアップ: "chore:" を使用（例: chore: remove deprecated files）
+   - スコープ: 影響範囲を括弧で追加（例: feat(api): add endpoint, fix(auth): resolve login issue）
+   - 破壊的変更: タイプの後に "!" を追加、またはフッターに "BREAKING CHANGE:" を記述
+4. Conventional Commits v1.0.0 形式に従った簡潔なコミットメッセージを生成
 5. `git commit -m "生成されたメッセージ"` を実行
 6. コミット結果を表示して成功を確認
 
