@@ -7,7 +7,12 @@
 
 1. **ファイル名の決定**:
    - `$ARGUMENTS` が指定されている場合: そのファイル名を使用
-   - `$ARGUMENTS` がない場合: デフォルトで `context.md` を使用
+   - `$ARGUMENTS` がない場合:
+     a. 現在の会話内容から作業内容を分析し、簡潔な英語のキーワード（2-4単語）を抽出
+        例: "authentication-feature", "bug-fix-order", "refactor-payment"
+     b. 現在時刻のタイムスタンプ（YYYYMMDDhhmm形式）を生成
+     c. ファイル名を `<キーワード>-<YYYYMMDDhhmm>.md` の形式で生成
+        例: `authentication-feature-202510301730.md`
 
 2. **最近の会話から以下を抽出**:
    - **作業の目的・背景**: なぜこの作業を始めたのか
@@ -53,7 +58,9 @@
 ## 引数
 
 `$ARGUMENTS` (オプション) - 保存先ファイル名（例: `current-work.md`）
-指定がない場合は `context.md` を使用
+
+指定がない場合は、会話内容から作業を推測し、`<作業内容>-<YYYYMMDDhhmm>.md` 形式で自動生成されます。
+例: `authentication-feature-202510301730.md`
 
 ## 使用例
 
@@ -61,17 +68,24 @@
 # ファイル名を指定して保存
 /save-context current-work.md
 
-# ファイル名を省略（デフォルト: context.md）
+# ファイル名を省略（自動生成: 作業内容-タイムスタンプ.md）
 /save-context
+# 例: authentication-feature-202510301730.md が生成される
 ```
 
 ## 実際のユースケース
 
 ```
-1. コンテキストが残り少ない → `/save-context current-work.md`
+1. コンテキストが残り少ない → `/save-context`
+   → 自動生成: `authentication-feature-202510301730.md`
 2. `/clear` でコンテキストクリア
-3. 新セッションで `/load-context current-work.md` で状況把握
+3. 新セッションで `/load-context authentication-feature-202510301730.md` で状況把握
 4. 作業継続
+
+または、明示的にファイル名を指定:
+1. `/save-context my-important-work.md`
+2. `/clear`
+3. `/load-context my-important-work.md`
 ```
 
 ## 注意事項

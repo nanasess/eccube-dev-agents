@@ -9,7 +9,11 @@
    - `$ARGUMENTS` が指定されている場合:
      - `@` 記法に対応（例: `@current-work.md` → `current-work.md`）
      - そのファイルを使用
-   - `$ARGUMENTS` がない場合: デフォルトで `context.md` を使用
+   - `$ARGUMENTS` がない場合:
+     - カレントディレクトリから `*-[0-9]*.md` パターンでコンテキストファイルを検索
+     - 最も新しく更新されたファイルを使用
+     - 複数見つかった場合: 最新のファイルを使用し、他のファイルも一覧表示
+     - 見つからない場合: エラーメッセージを表示し、`/save-context` の使用を提案
 
 2. **ファイルの内容を読み込み**:
    - 指定されたファイルを読み込む
@@ -32,18 +36,19 @@
 ## 引数
 
 `$ARGUMENTS` (オプション) - ファイル名（`@` 記法にも対応、例: `current-work.md` または `@current-work.md`）
-指定がない場合は `context.md` を使用
+
+指定がない場合は、カレントディレクトリから `*-[0-9]*.md` パターンで検索し、最も新しいコンテキストファイルを自動選択します。
 
 ## 使用例
 
 ```bash
 # ファイル名を指定して読み込み
-/load-context current-work.md
+/load-context authentication-feature-202510301730.md
 
 # @記法で指定
-/load-context @current-work.md
+/load-context @authentication-feature-202510301730.md
 
-# ファイル名を省略（デフォルト: context.md）
+# ファイル名を省略（自動検索: 最新のコンテキストファイルを使用）
 /load-context
 ```
 
@@ -79,10 +84,16 @@ EC-CUBEプラグインにOAuth2.0ベースのユーザー認証機能を追加
 前セッションで `/save-context` により保存されたコンテキストを新セッションで復元し、作業を継続します。
 
 ```
-1. 前セッションで `/save-context current-work.md`
+1. 前セッションで `/save-context`
+   → 自動生成: `authentication-feature-202510301730.md`
 2. `/clear` でコンテキストクリア
-3. 新セッションで `/load-context current-work.md` ← ここで使用
+3. 新セッションで `/load-context` ← ここで使用（自動的に最新ファイルを読み込み）
 4. 作業継続
+
+または、明示的にファイル名を指定:
+1. `/save-context my-work.md`
+2. `/clear`
+3. `/load-context my-work.md`
 ```
 
 ## 注意事項

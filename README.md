@@ -17,8 +17,8 @@ EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integrati
 - **create-plan** - Create implementation plans as checklists with auto-generated filenames
 - **update-plan** - Update implementation plans with progress tracking
 - **load-plan** - Load and summarize implementation plans with progress status
-- **save-context** - Save conversation context before clearing (for session continuity)
-- **load-context** - Load saved context to resume work after `/clear`
+- **save-context** - Save conversation context with auto-generated descriptive filename and timestamp (e.g., `auth-feature-202510301730.md`)
+- **load-context** - Load saved context to resume work after `/clear` (auto-detects latest context file)
 
 #### GitHub Integration
 - **github-check** - View PR/Issue details with automatic number extraction
@@ -127,11 +127,18 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 # Load implementation plan
 /load-plan authentication-feature-plan.md
 
-# Save conversation context before clearing
-/save-context current-work.md
+# Save conversation context before clearing (auto-generates filename)
+/save-context
+# Example output: auth-feature-202510301730.md
 
-# Load saved context to resume work
-/load-context current-work.md
+# Or specify custom filename
+/save-context my-work.md
+
+# Load saved context to resume work (auto-detects latest file)
+/load-context
+
+# Or specify filename explicitly
+/load-context auth-feature-202510301730.md
 ```
 
 **Typical workflow:**
@@ -139,9 +146,9 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 1. /create-plan feature-plan.md      # Create implementation plan
 2. [Implementation work]              # Code, test, etc.
 3. /update-plan                       # Update progress
-4. /save-context work-context.md     # Save context when running low
+4. /save-context                      # Save context (auto-generates filename with timestamp)
 5. /clear                             # Clear context
-6. /load-context work-context.md     # Restore conversation
+6. /load-context                      # Restore conversation (auto-detects latest file)
 7. /load-plan feature-plan.md        # Check implementation plan
 8. [Continue work]                    # Resume implementation
 ```
