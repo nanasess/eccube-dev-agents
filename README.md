@@ -13,13 +13,23 @@ EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integrati
 
 ### ⚡ Custom Commands
 
-- **gemini-search** - Web search using Google Gemini CLI
-- **gemini** - Direct Gemini CLI interaction with custom prompts
+#### Development Workflow
+- **create-plan** - Create implementation plans as checklists with auto-generated filenames
+- **update-plan** - Update implementation plans with progress tracking
+- **load-plan** - Load and summarize implementation plans with progress status
+- **save-context** - Save conversation context with auto-generated descriptive filename and timestamp (e.g., `auth-feature-202510301730.md`)
+- **load-context** - Load saved context to resume work after `/clear` (auto-detects latest context file)
+
+#### GitHub Integration
 - **github-check** - View PR/Issue details with automatic number extraction
 - **github-logs-analyze** - Analyze failed GitHub Actions jobs
 - **generate-commit** - Generate commit messages from git diff
 - **update-pr-description** - Auto-update PR descriptions based on changes
 - **create-pr** - Create PRs with template support, remote sync check, and argument parsing
+
+#### AI Search
+- **gemini-search** - Web search using Google Gemini CLI
+- **gemini** - Direct Gemini CLI interaction with custom prompts
 
 ### 🔔 Slack Notifications
 
@@ -99,13 +109,53 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 
 ### Using Commands
 
+#### Development Workflow Commands
+
 ```bash
-# Web search
-/gemini-search latest EC-CUBE 4.2 features
+# Create implementation plan (auto-generates filename from context)
+/create-plan
 
-# Direct Gemini interaction
-/gemini explain the difference between Doctrine and Eloquent
+# Create plan with specific filename
+/create-plan authentication-feature-plan.md
 
+# Update implementation plan (auto-finds *-plan.md files)
+/update-plan
+
+# Update specific plan
+/update-plan authentication-feature-plan.md
+
+# Load implementation plan
+/load-plan authentication-feature-plan.md
+
+# Save conversation context before clearing (auto-generates filename)
+/save-context
+# Example output: auth-feature-202510301730.md
+
+# Or specify custom filename
+/save-context my-work.md
+
+# Load saved context to resume work (auto-detects latest file)
+/load-context
+
+# Or specify filename explicitly
+/load-context auth-feature-202510301730.md
+```
+
+**Typical workflow:**
+```bash
+1. /create-plan feature-plan.md      # Create implementation plan
+2. [Implementation work]              # Code, test, etc.
+3. /update-plan                       # Update progress
+4. /save-context                      # Save context (auto-generates filename with timestamp)
+5. /clear                             # Clear context
+6. /load-context                      # Restore conversation (auto-detects latest file)
+7. /load-plan feature-plan.md        # Check implementation plan
+8. [Continue work]                    # Resume implementation
+```
+
+#### GitHub Integration Commands
+
+```bash
 # Check GitHub PR
 /github-check #450
 
@@ -124,6 +174,16 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 # Create PR with options
 /create-pr --repo upstream/repo --base develop
 /create-pr --draft
+```
+
+#### AI Search Commands
+
+```bash
+# Web search
+/gemini-search latest EC-CUBE 4.2 features
+
+# Direct Gemini interaction
+/gemini explain the difference between Doctrine and Eloquent
 ```
 
 ## Configuration
@@ -157,6 +217,11 @@ eccube-dev-agents/
 │   │   ├── log-analyzer.md
 │   │   └── refactoring-expert.md
 │   ├── commands/                     # Custom slash commands
+│   │   ├── create-plan.md
+│   │   ├── update-plan.md
+│   │   ├── load-plan.md
+│   │   ├── save-context.md
+│   │   ├── load-context.md
 │   │   ├── gemini-search.md
 │   │   ├── gemini.md
 │   │   ├── github-check.md
