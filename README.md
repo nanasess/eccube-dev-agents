@@ -114,42 +114,50 @@ Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
 ```bash
 # Create implementation plan (auto-generates filename from context)
 /create-plan
+# → Saves to .ai-agent/plans/
 
 # Create plan with specific filename
 /create-plan authentication-feature-plan.md
+# → Saves to .ai-agent/plans/authentication-feature-plan.md
 
-# Update implementation plan (auto-finds *-plan.md files)
+# Update implementation plan (auto-finds *-plan.md files in .ai-agent/plans/)
 /update-plan
 
 # Update specific plan
 /update-plan authentication-feature-plan.md
 
-# Load implementation plan
+# Load implementation plan (searches in .ai-agent/plans/)
 /load-plan authentication-feature-plan.md
 
 # Save conversation context before clearing (auto-generates filename)
 /save-context
-# Example output: auth-feature-202510301730.md
+# → Example output: .ai-agent/sessions/auth-feature-202510301730.md
 
 # Or specify custom filename
 /save-context my-work.md
+# → Saves to .ai-agent/sessions/my-work.md
 
-# Load saved context to resume work (auto-detects latest file)
+# Load saved context to resume work (auto-detects latest file in .ai-agent/sessions/)
 /load-context
 
 # Or specify filename explicitly
 /load-context auth-feature-202510301730.md
 ```
 
+**File Organization:**
+- Context files: `.ai-agent/sessions/`
+- Implementation plans: `.ai-agent/plans/`
+- Both directories are auto-created when needed
+
 **Typical workflow:**
 ```bash
-1. /create-plan feature-plan.md      # Create implementation plan
+1. /create-plan feature-plan.md      # Create plan → .ai-agent/plans/feature-plan.md
 2. [Implementation work]              # Code, test, etc.
 3. /update-plan                       # Update progress
-4. /save-context                      # Save context (auto-generates filename with timestamp)
+4. /save-context                      # Save → .ai-agent/sessions/feature-202511130924.md
 5. /clear                             # Clear context
-6. /load-context                      # Restore conversation (auto-detects latest file)
-7. /load-plan feature-plan.md        # Check implementation plan
+6. /load-context                      # Restore (auto-detects latest in .ai-agent/sessions/)
+7. /load-plan feature-plan.md        # Check plan (.ai-agent/plans/feature-plan.md)
 8. [Continue work]                    # Resume implementation
 ```
 
