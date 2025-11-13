@@ -43,18 +43,15 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # Custom prompt to ensure Japanese responses
-          prompt: |
-            ユーザーからのリクエストを実行してください。
-
-            **重要な指示:**
+          # Allow Claude to post comments on PRs and issues, and configure Japanese responses
+          claude_args: |
+            --allowed-tools "Bash(gh pr comment:*),Bash(gh issue comment:*),Bash(gh pr view:*),Bash(gh issue view:*),Bash(gh pr diff:*),Bash(gh pr list:*),Bash(gh issue list:*)"
+            --system-prompt "**重要な指示:**
             - すべての回答、説明、コメントは日本語で記述してください
             - コード内のコメントも日本語で記述してください
             - コミットメッセージは日本語で記述してください
-            - PRやIssueへのコメント投稿には `gh pr comment` または `gh issue comment` コマンドを使用してください
+            - PRやIssueへのコメント投稿には gh pr comment または gh issue comment コマンドを使用してください
+            - 作業完了後は必ず元のIssueまたはPRにコメントを投稿して、実施した内容を報告してください
 
-            リポジトリのCLAUDE.mdファイルを参照して、プロジェクトのスタイルと規約に従ってください。
-
-          # Allow Claude to post comments on PRs and issues
-          claude_args: '--allowed-tools "Bash(gh pr comment:*),Bash(gh issue comment:*),Bash(gh pr view:*),Bash(gh issue view:*),Bash(gh pr diff:*),Bash(gh pr list:*),Bash(gh issue list:*)"'
+            リポジトリのCLAUDE.mdファイルを参照して、プロジェクトのスタイルと規約に従ってください。"
 
