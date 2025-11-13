@@ -47,8 +47,9 @@
    ```
 
 4. **ファイルに書き込み**:
-   - 指定されたファイル名で保存
-   - 保存先はカレントディレクトリ
+   - `.ai-agent/sessions/` ディレクトリが存在しない場合は作成（`mkdir -p .ai-agent/sessions`）
+   - 指定されたファイル名で `.ai-agent/sessions/` 以下に保存
+   - 保存先: `.ai-agent/sessions/<ファイル名>`
 
 5. **保存完了を報告**:
    - 保存したファイル名
@@ -67,23 +68,25 @@
 ```bash
 # ファイル名を指定して保存
 /save-context current-work.md
+# → .ai-agent/sessions/current-work.md に保存
 
 # ファイル名を省略（自動生成: 作業内容-タイムスタンプ.md）
 /save-context
-# 例: authentication-feature-202510301730.md が生成される
+# 例: .ai-agent/sessions/authentication-feature-202510301730.md が生成される
 ```
 
 ## 実際のユースケース
 
 ```
 1. コンテキストが残り少ない → `/save-context`
-   → 自動生成: `authentication-feature-202510301730.md`
+   → 自動生成: `.ai-agent/sessions/authentication-feature-202510301730.md`
 2. `/clear` でコンテキストクリア
 3. 新セッションで `/load-context authentication-feature-202510301730.md` で状況把握
 4. 作業継続
 
 または、明示的にファイル名を指定:
 1. `/save-context my-important-work.md`
+   → `.ai-agent/sessions/my-important-work.md` に保存
 2. `/clear`
 3. `/load-context my-important-work.md`
 ```

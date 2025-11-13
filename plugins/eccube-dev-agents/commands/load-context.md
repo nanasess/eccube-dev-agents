@@ -8,12 +8,14 @@
 1. **ファイルの特定**:
    - `$ARGUMENTS` が指定されている場合:
      - `@` 記法に対応（例: `@current-work.md` → `current-work.md`）
-     - そのファイルを使用
+     - ファイル名のみの場合: `.ai-agent/sessions/<ファイル名>` を検索
+     - 絶対/相対パスの場合: そのまま使用（後方互換性）
    - `$ARGUMENTS` がない場合:
-     - カレントディレクトリから `*-[0-9]*.md` パターンでコンテキストファイルを検索
+     - `.ai-agent/sessions/` ディレクトリから `*-[0-9]*.md` パターンで検索
      - 最も新しく更新されたファイルを使用
      - 複数見つかった場合: 最新のファイルを使用し、他のファイルも一覧表示
-     - 見つからない場合: エラーメッセージを表示し、`/save-context` の使用を提案
+     - `.ai-agent/sessions/` が存在しない、またはファイルが見つからない場合: カレントディレクトリにフォールバック（後方互換性）
+     - それでも見つからない場合: エラーメッセージを表示し、`/save-context` の使用を提案
 
 2. **ファイルの内容を読み込み**:
    - 指定されたファイルを読み込む
@@ -37,18 +39,19 @@
 
 `$ARGUMENTS` (オプション) - ファイル名（`@` 記法にも対応、例: `current-work.md` または `@current-work.md`）
 
-指定がない場合は、カレントディレクトリから `*-[0-9]*.md` パターンで検索し、最も新しいコンテキストファイルを自動選択します。
+指定がない場合は、`.ai-agent/sessions/` ディレクトリから `*-[0-9]*.md` パターンで検索し、最も新しいコンテキストファイルを自動選択します。
 
 ## 使用例
 
 ```bash
-# ファイル名を指定して読み込み
+# ファイル名を指定して読み込み（.ai-agent/sessions/ 内を検索）
 /load-context authentication-feature-202510301730.md
+# → .ai-agent/sessions/authentication-feature-202510301730.md を読み込み
 
 # @記法で指定
 /load-context @authentication-feature-202510301730.md
 
-# ファイル名を省略（自動検索: 最新のコンテキストファイルを使用）
+# ファイル名を省略（自動検索: .ai-agent/sessions/ 内の最新ファイル）
 /load-context
 ```
 
@@ -85,15 +88,17 @@ EC-CUBEプラグインにOAuth2.0ベースのユーザー認証機能を追加
 
 ```
 1. 前セッションで `/save-context`
-   → 自動生成: `authentication-feature-202510301730.md`
+   → 自動生成: `.ai-agent/sessions/authentication-feature-202510301730.md`
 2. `/clear` でコンテキストクリア
 3. 新セッションで `/load-context` ← ここで使用（自動的に最新ファイルを読み込み）
 4. 作業継続
 
 または、明示的にファイル名を指定:
 1. `/save-context my-work.md`
+   → `.ai-agent/sessions/my-work.md` に保存
 2. `/clear`
 3. `/load-context my-work.md`
+   → `.ai-agent/sessions/my-work.md` から読み込み
 ```
 
 ## 注意事項
