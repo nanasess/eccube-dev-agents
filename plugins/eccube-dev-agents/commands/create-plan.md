@@ -34,8 +34,9 @@
    ```
 
 4. **ファイルに書き込み**:
-   - 指定されたファイル名（または自動生成されたファイル名）で保存
-   - 保存先はカレントディレクトリ
+   - `.ai-agent/plans/` ディレクトリが存在しない場合は作成（`mkdir -p .ai-agent/plans`）
+   - 指定されたファイル名（または自動生成されたファイル名）で `.ai-agent/plans/` 以下に保存
+   - 保存先: `.ai-agent/plans/<ファイル名>`
 
 5. **保存完了を報告**:
    - 保存したファイル名
@@ -51,9 +52,11 @@
 ```bash
 # ファイル名を指定して作成
 /create-plan authentication-feature-plan.md
+# → .ai-agent/plans/authentication-feature-plan.md に保存
 
 # ファイル名を省略（自動生成）
 /create-plan
+# 例: .ai-agent/plans/user-authentication-plan.md が生成される
 ```
 
 ## 注意事項

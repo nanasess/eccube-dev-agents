@@ -8,10 +8,14 @@
 1. **ファイルの特定**:
    - `$ARGUMENTS` が指定されている場合:
      - `@` 記法に対応（例: `@feature-plan.md` → `feature-plan.md`）
-     - そのファイルを使用
-   - `$ARGUMENTS` がない場合: カレントディレクトリから `*-plan.md` ファイルを検索
-     - 複数見つかった場合: 最も新しく更新されたファイルを使用（または一覧を表示）
-     - 見つからない場合: エラーメッセージを表示し、`/create-plan` の使用を提案
+     - ファイル名のみの場合: `.ai-agent/plans/<ファイル名>` を検索
+     - 絶対/相対パスの場合: そのまま使用（後方互換性）
+   - `$ARGUMENTS` がない場合:
+     - `.ai-agent/plans/` ディレクトリから `*-plan.md` パターンで検索
+     - 最も新しく更新されたファイルを使用
+     - 複数見つかった場合: 最新のファイルを使用し、他のファイルも一覧表示
+     - `.ai-agent/plans/` が存在しない、またはファイルが見つからない場合: カレントディレクトリにフォールバック（後方互換性）
+     - それでも見つからない場合: エラーメッセージを表示し、`/create-plan` の使用を提案
 
 2. **ファイルの内容を読み込み**:
    - 指定されたファイルを読み込む
@@ -36,13 +40,14 @@
 ## 使用例
 
 ```bash
-# ファイル名を指定して読み込み
+# ファイル名を指定して読み込み（.ai-agent/plans/ 内を検索）
 /load-plan authentication-feature-plan.md
+# → .ai-agent/plans/authentication-feature-plan.md を読み込み
 
 # @記法で指定
 /load-plan @authentication-feature-plan.md
 
-# ファイル名を省略（自動検索）
+# ファイル名を省略（自動検索: .ai-agent/plans/ 内の最新ファイル）
 /load-plan
 ```
 

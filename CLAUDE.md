@@ -21,6 +21,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 外部CLIツール（gemini, gh）との統合
    - 12つのコマンド:
      - Development workflow: create-plan, update-plan, load-plan, save-context, load-context
+       - ファイル保存先: `.ai-agent/sessions/` (context), `.ai-agent/plans/` (plans)
+       - 自動ディレクトリ作成、後方互換性あり（カレントディレクトリへのフォールバック）
      - GitHub integration: github-check, github-logs-analyze, generate-commit, update-pr-description, create-pr
      - AI search: gemini-search, gemini
 
