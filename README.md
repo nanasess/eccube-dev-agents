@@ -10,6 +10,7 @@ EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integrati
 - **bug-investigator** - Investigates bugs with detailed error log analysis and systematic debugging
 - **log-analyzer** - Analyzes GitHub Actions CI/CD logs to identify root causes of test failures
 - **refactoring-expert** - Improves code quality, identifies DRY violations, and applies best practices
+- **test-debugger** - Guides efficient test debugging by suggesting appropriate debug code to generate detailed logs (PHPUnit/Symfony focus, applicable to TypeScript/Jest, Python/pytest)
 
 ### ⚡ Custom Commands
 

@@ -14,6 +14,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - 各エージェントはYAMLフロントマター付きMarkdown形式で定義
    - `name`, `description`, `tools`, `model`, `color`パラメータを含む
    - エージェント本体は詳細なプロンプト指示で構成
+   - **利用可能なエージェント（5つ）**:
+     - **implementation-analyzer** (sonnet) - 実装進捗分析
+     - **bug-investigator** (opus) - バグの根本原因調査
+     - **log-analyzer** (sonnet) - CI/CDログ解析
+     - **refactoring-expert** (sonnet) - リファクタリング提案
+     - **test-debugger** (opus) - テストデバッグ手法の提示（ログ生成）
 
 2. **Custom Commands** (`commands/`)
    - スラッシュコマンドとして実行可能なMarkdownファイル
@@ -53,6 +59,22 @@ color: blue|red|green|...
 - EC-CUBE/Symfony固有の知識を含める
 - 常に日本語で結果を報告（全エージェント共通）
 
+#### エージェントの役割分担
+
+| エージェント | モデル | 主な役割 | 使用タイミング | 特徴 |
+|------------|--------|---------|-------------|------|
+| **implementation-analyzer** | sonnet | 実装状況の分析 | 仕様とコードのマッピング確認時 | PR/Issue/コミット履歴を統合分析 |
+| **bug-investigator** | opus | バグの根本原因調査 | **既存のログがある**場合 | 既存ログを**解析** |
+| **log-analyzer** | sonnet | CI/CDログ解析 | GitHub Actions失敗時 | 既存ログを**解析** |
+| **refactoring-expert** | sonnet | リファクタリング提案 | コード品質向上時 | DRY原則、ベストプラクティス適用 |
+| **test-debugger** | opus | テストデバッグ手法提示 | **ログが不足している**場合 | ログを**生成**する手法を提示 |
+
+**test-debugger の特徴**:
+- **ハイブリッド型設計**: PHPUnit/Symfony をメインとしつつ、TypeScript/Jest、Python/pytest にも応用可能
+- **ログ生成に特化**: bug-investigator や log-analyzer と異なり、「ログを生成する方法」を提示
+- **段階的デバッグ**: 最も侵襲性の低い方法（catchExceptions(false)）から始め、必要に応じて詳細な方法に移行
+- **既存エージェントとの連携**: デバッグログ取得後、根本原因分析は bug-investigator に引き継ぐ設計
+
 ### コマンド設計パターン
 
 スラッシュコマンドは以下のパターンを使用：
@@ -81,6 +103,20 @@ color: blue|red|green|...
    - `agents/`にMarkdownファイルを作成
    - YAMLフロントマターで設定を定義
    - プロンプトで調査手順を明記
+   - **エージェント実装例**:
+     ```yaml
+     ---
+     name: test-debugger
+     description: テストでエラーが発生しているが詳細なログが不足している場合に...
+     model: opus  # sonnet または opus
+     color: purple  # エージェントの識別色
+     ---
+
+     あなたはテストデバッグに深い知識を持つ専門家です...
+     ```
+   - **model 選択の指針**:
+     - `sonnet`: 定型的なパターン提示、高速・コスト効率重視
+     - `opus`: 複雑な推論、深い分析が必要な場合
 
 2. **コマンド追加/変更**
    - `commands/`にMarkdownファイルを作成
@@ -103,8 +139,12 @@ git status
 git log --oneline -5
 
 # エージェント/コマンド定義の確認
-cat agents/implementation-analyzer.md
-cat commands/github-check.md
+cat plugins/eccube-dev-agents/agents/implementation-analyzer.md
+cat plugins/eccube-dev-agents/agents/test-debugger.md
+cat plugins/eccube-dev-agents/commands/github-check.md
+
+# エージェント一覧の確認
+ls -la plugins/eccube-dev-agents/agents/
 ```
 
 ### 配布とインストール
