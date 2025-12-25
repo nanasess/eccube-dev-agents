@@ -1,230 +1,232 @@
 # EC-CUBE Dev Agents
 
-EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integration, GitHub automation, and Slack notifications. Optimized for EC-CUBE/Symfony but applicable to any development project.
+**日本語:** EC-CUBE/Symfony開発に特化したAIエージェント、Gemini統合、GitHub自動化、Slack通知を備えた開発ツールキット。EC-CUBE/Symfony向けに最適化されていますが、あらゆる開発プロジェクトに適用可能です。
 
-## Features
+**English:** EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integration, GitHub automation, and Slack notifications. Optimized for EC-CUBE/Symfony but applicable to any development project.
 
-### 🤖 Specialized AI Agents
+## 機能
 
-- **implementation-analyzer** - Analyzes implementation status by examining specs, PRs, commits, and staged changes
-- **bug-investigator** - Investigates bugs with detailed error log analysis and systematic debugging
-- **log-analyzer** - Analyzes GitHub Actions CI/CD logs to identify root causes of test failures
-- **refactoring-expert** - Improves code quality, identifies DRY violations, and applies best practices
+### 🤖 専用AIエージェント
 
-### ⚡ Custom Commands
+- **implementation-analyzer** - 仕様書、PR、コミット、ステージング済み変更を調査して実装状況を分析
+- **bug-investigator** - 詳細なエラーログ分析と体系的なデバッグでバグを調査
+- **log-analyzer** - GitHub Actions CI/CDログを分析してテスト失敗の根本原因を特定
+- **refactoring-expert** - コード品質の向上、DRY違反の特定、ベストプラクティスの適用
 
-#### Development Workflow
-- **create-plan** - Create implementation plans as checklists with auto-generated filenames
-- **update-plan** - Update implementation plans with progress tracking
-- **load-plan** - Load and summarize implementation plans with progress status
-- **save-context** - Save conversation context with auto-generated descriptive filename and timestamp (e.g., `auth-feature-202510301730.md`)
-- **load-context** - Load saved context to resume work after `/clear` (auto-detects latest context file)
+### ⚡ カスタムコマンド
 
-#### GitHub Integration
-- **github-check** - View PR/Issue details with automatic number extraction
-- **github-logs-analyze** - Analyze failed GitHub Actions jobs
-- **generate-commit** - Generate commit messages from git diff
-- **update-pr-description** - Auto-update PR descriptions based on changes
-- **create-pr** - Create PRs with template support, remote sync check, and argument parsing
+#### 開発ワークフロー
+- **create-plan** - 自動生成されたファイル名でチェックリスト形式の実装計画を作成
+- **update-plan** - 進捗追跡付きで実装計画を更新
+- **load-plan** - 進捗状況と共に実装計画を読み込んで要約
+- **save-context** - 会話コンテキストを、自動生成される説明的なファイル名とタイムスタンプで保存 (例: `auth-feature-202510301730.md`)
+- **load-context** - `/clear` 後に作業を再開するために保存したコンテキストを読み込む (最新のコンテキストファイルを自動検出)
 
-#### AI Search
-- **gemini-search** - Web search using Google Gemini CLI
-- **gemini** - Direct Gemini CLI interaction with custom prompts
+#### GitHub統合
+- **github-check** - 自動番号抽出によるPR/Issue詳細の表示
+- **github-logs-analyze** - 失敗したGitHub Actionsジョブの分析
+- **generate-commit** - git diffからコミットメッセージを生成
+- **update-pr-description** - 変更内容に基づいてPR説明を自動更新
+- **create-pr** - テンプレートサポート、リモート同期チェック、引数解析によるPR作成
 
-### 🔔 Slack Notifications
+#### AI検索
+- **gemini-search** - Google Gemini CLIを使用したWeb検索
+- **gemini** - カスタムプロンプトによる直接Gemini CLI操作
 
-Automatic notifications to Slack:
-- Task completion notifications (Stop hook)
-- Task confirmation notifications (Notification hook)
-- AI-summarized conversation content in Japanese with mrkdwn formatting
+### 🔔 Slack通知
 
-## Prerequisites
+以下の自動通知をSlackに送信:
+- タスク完了通知 (Stopフック)
+- タスク確認通知 (Notificationフック)
+- AIによる会話内容の日本語要約をmrkdwn形式で送信
 
-- **Gemini CLI** - The `gemini` command must be available in your PATH
-- **GitHub CLI (gh)** - For GitHub integration commands
-- **jq** - JSON processor for hook commands
-- **curl** - For Slack webhook integration
+## 必要要件
 
-## Installation
+- **Gemini CLI** - `gemini` コマンドがPATHに含まれている必要があります
+- **GitHub CLI (gh)** - GitHub統合コマンド用
+- **jq** - フックコマンド用のJSONプロセッサ
+- **curl** - Slack webhook統合用
 
-### Quick Start (Recommended)
+## インストール
 
-Install directly from GitHub:
+### クイックスタート (推奨)
+
+GitHubから直接インストール:
 
 ```bash
-# Add the GitHub marketplace
+# GitHubマーケットプレイスを追加
 claude plugin marketplace add nanasess/eccube-dev-agents
 
-# Install the plugin
+# プラグインをインストール
 claude plugin install eccube-dev-agents
 ```
 
-**Restart Claude Code** to activate the plugin.
+**Claude Codeを再起動**してプラグインを有効化してください。
 
-### Alternative: Local Development Installation
+### 代替方法: ローカル開発インストール
 
-For plugin development or testing local modifications:
+プラグイン開発やローカル変更のテスト用:
 
 ```bash
-# Clone the repository to a local directory
+# リポジトリをローカルディレクトリにクローン
 git clone https://github.com/nanasess/eccube-dev-agents.git /path/to/local/eccube-dev-agents
 
-# Add the local marketplace
-# Note: Point to the repository root directory containing .claude-plugin/marketplace.json
+# ローカルマーケットプレイスを追加
+# 注意: .claude-plugin/marketplace.json を含むリポジトリルートディレクトリを指定
 claude plugin marketplace add /path/to/local/eccube-dev-agents
 
-# Install the plugin
+# プラグインをインストール
 claude plugin install eccube-dev-agents
 ```
 
-The repository uses a nested structure where the actual plugin contents are in `plugins/eccube-dev-agents/` subdirectory. The marketplace.json at the root configures this layout.
+リポジトリはネストされた構造を使用しており、実際のプラグインコンテンツは `plugins/eccube-dev-agents/` サブディレクトリにあります。ルートにあるmarketplace.jsonがこのレイアウトを設定しています。
 
-### Environment Setup
+### 環境設定
 
-For Slack notifications to work, set your Slack webhook URL:
+Slack通知を機能させるには、Slack webhook URLを設定してください:
 
 ```bash
 export ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 ```
 
-Add this to your `~/.bashrc` or `~/.zshrc` to make it persistent.
+これを `~/.bashrc` または `~/.zshrc` に追加すると永続化されます。
 
-## Usage
+## 使用方法
 
-### Using Agents
+### エージェントの使用
 
 ```bash
-# Analyze implementation status
-"Use implementation-analyzer agent to analyze the current implementation"
+# 実装状況を分析
+"implementation-analyzer エージェントを使用して現在の実装を分析してください"
 
-# Investigate bugs
-"Use bug-investigator agent to find the root cause of this error"
+# バグを調査
+"bug-investigator エージェントを使用してこのエラーの根本原因を見つけてください"
 
-# Analyze CI logs
-"Use log-analyzer agent to analyze this failed GitHub Actions run"
+# CIログを分析
+"log-analyzer エージェントを使用してこの失敗したGitHub Actionsの実行を分析してください"
 
-# Refactor code
-"Use refactoring-expert agent to refactor this code"
+# コードをリファクタリング
+"refactoring-expert エージェントを使用してこのコードをリファクタリングしてください"
 ```
 
-### Using Commands
+### コマンドの使用
 
-#### Development Workflow Commands
+#### 開発ワークフローコマンド
 
 ```bash
-# Create implementation plan (auto-generates filename from context)
+# 実装計画を作成 (コンテキストからファイル名を自動生成)
 /create-plan
-# → Saves to .ai-agent/plans/
+# → .ai-agent/plans/ に保存
 
-# Create plan with specific filename
+# 特定のファイル名で計画を作成
 /create-plan authentication-feature-plan.md
-# → Saves to .ai-agent/plans/authentication-feature-plan.md
+# → .ai-agent/plans/authentication-feature-plan.md に保存
 
-# Update implementation plan (auto-finds *-plan.md files in .ai-agent/plans/)
+# 実装計画を更新 (.ai-agent/plans/ 内の *-plan.md ファイルを自動検索)
 /update-plan
 
-# Update specific plan
+# 特定の計画を更新
 /update-plan authentication-feature-plan.md
 
-# Load implementation plan (searches in .ai-agent/plans/)
+# 実装計画を読み込む (.ai-agent/plans/ 内を検索)
 /load-plan authentication-feature-plan.md
 
-# Save conversation context before clearing (auto-generates filename)
+# クリア前に会話コンテキストを保存 (ファイル名を自動生成)
 /save-context
-# → Example output: .ai-agent/sessions/auth-feature-202510301730.md
+# → 例: .ai-agent/sessions/auth-feature-202510301730.md
 
-# Or specify custom filename
+# またはカスタムファイル名を指定
 /save-context my-work.md
-# → Saves to .ai-agent/sessions/my-work.md
+# → .ai-agent/sessions/my-work.md に保存
 
-# Load saved context to resume work (auto-detects latest file in .ai-agent/sessions/)
+# 保存したコンテキストを読み込んで作業を再開 (.ai-agent/sessions/ 内の最新ファイルを自動検出)
 /load-context
 
-# Or specify filename explicitly
+# またはファイル名を明示的に指定
 /load-context auth-feature-202510301730.md
 ```
 
-**File Organization:**
-- Context files: `.ai-agent/sessions/`
-- Implementation plans: `.ai-agent/plans/`
-- Both directories are auto-created when needed
+**ファイル構成:**
+- コンテキストファイル: `.ai-agent/sessions/`
+- 実装計画: `.ai-agent/plans/`
+- 両ディレクトリは必要時に自動作成されます
 
-**Typical workflow:**
+**典型的なワークフロー:**
 ```bash
-1. /create-plan feature-plan.md      # Create plan → .ai-agent/plans/feature-plan.md
-2. [Implementation work]              # Code, test, etc.
-3. /update-plan                       # Update progress
-4. /save-context                      # Save → .ai-agent/sessions/feature-202511130924.md
-5. /clear                             # Clear context
-6. /load-context                      # Restore (auto-detects latest in .ai-agent/sessions/)
-7. /load-plan feature-plan.md        # Check plan (.ai-agent/plans/feature-plan.md)
-8. [Continue work]                    # Resume implementation
+1. /create-plan feature-plan.md      # 計画を作成 → .ai-agent/plans/feature-plan.md
+2. [実装作業]                          # コーディング、テストなど
+3. /update-plan                       # 進捗を更新
+4. /save-context                      # 保存 → .ai-agent/sessions/feature-202511130924.md
+5. /clear                             # コンテキストをクリア
+6. /load-context                      # 復元 (.ai-agent/sessions/ 内の最新を自動検出)
+7. /load-plan feature-plan.md        # 計画を確認 (.ai-agent/plans/feature-plan.md)
+8. [作業を続ける]                      # 実装を再開
 ```
 
-#### GitHub Integration Commands
+#### GitHub統合コマンド
 
 ```bash
-# Check GitHub PR
+# GitHub PRを確認
 /github-check #450
 
-# Analyze failed CI
+# 失敗したCIを分析
 /github-logs-analyze <job-id>
 
-# Generate commit message
+# コミットメッセージを生成
 /generate-commit
 
-# Update PR description
+# PR説明を更新
 /update-pr-description
 
-# Create pull request
+# プルリクエストを作成
 /create-pr
 
-# Create PR with options
+# オプション付きでPRを作成
 /create-pr --repo upstream/repo --base develop
 /create-pr --draft
 ```
 
-#### AI Search Commands
+#### AI検索コマンド
 
 ```bash
-# Web search
-/gemini-search latest EC-CUBE 4.2 features
+# Web検索
+/gemini-search 最新のEC-CUBE 4.2機能
 
-# Direct Gemini interaction
-/gemini explain the difference between Doctrine and Eloquent
+# 直接Gemini操作
+/gemini DoctrineとEloquentの違いを説明してください
 ```
 
-## Configuration
+## 設定
 
-### Customizing Hooks
+### フックのカスタマイズ
 
-Edit `hooks/hooks.json` to customize notification behavior:
+`hooks/hooks.json` を編集して通知動作をカスタマイズ:
 
-- Modify the Gemini prompt for different summarization styles
-- Change the Slack message format
-- Add additional hooks for other events
+- 異なる要約スタイルのためにGeminiプロンプトを変更
+- Slackメッセージ形式を変更
+- 他のイベント用の追加フックを追加
 
-### Gemini CLI Setup
+### Gemini CLIのセットアップ
 
-Ensure the `gemini` command is available in your PATH. If it's installed in a custom location, you can:
-- Add it to your PATH: `export PATH="$PATH:/path/to/gemini"`
-- Or create a symlink: `ln -s /path/to/gemini/bin/gemini /usr/local/bin/gemini`
+`gemini` コマンドがPATHで利用可能であることを確認してください。カスタムの場所にインストールされている場合:
+- PATHに追加: `export PATH="$PATH:/path/to/gemini"`
+- またはシンボリックリンクを作成: `ln -s /path/to/gemini/bin/gemini /usr/local/bin/gemini`
 
-## Structure
+## 構造
 
 ```
 eccube-dev-agents/
 ├── .claude-plugin/
-│   └── marketplace.json              # Local marketplace configuration
-├── plugins/eccube-dev-agents/        # Plugin contents
+│   └── marketplace.json              # ローカルマーケットプレイス設定
+├── plugins/eccube-dev-agents/        # プラグインコンテンツ
 │   ├── .claude-plugin/
-│   │   └── plugin.json               # Plugin metadata
-│   ├── agents/                       # AI agent definitions
+│   │   └── plugin.json               # プラグインメタデータ
+│   ├── agents/                       # AIエージェント定義
 │   │   ├── implementation-analyzer.md
 │   │   ├── bug-investigator.md
 │   │   ├── log-analyzer.md
 │   │   └── refactoring-expert.md
-│   ├── commands/                     # Custom slash commands
+│   ├── commands/                     # カスタムスラッシュコマンド
 │   │   ├── create-plan.md
 │   │   ├── update-plan.md
 │   │   ├── load-plan.md
@@ -238,19 +240,19 @@ eccube-dev-agents/
 │   │   ├── update-pr-description.md
 │   │   └── create-pr.md
 │   └── hooks/
-│       └── hooks.json                # Event hooks configuration
-├── CLAUDE.md                          # Plugin development guide
+│       └── hooks.json                # イベントフック設定
+├── CLAUDE.md                          # プラグイン開発ガイド
 └── README.md
 ```
 
-## Contributing
+## コントリビューション
 
-Issues and pull requests are welcome! Please feel free to contribute improvements.
+IssueやPull Requestを歓迎します!改善へのご協力をお待ちしています。
 
-## License
+## ライセンス
 
 MIT
 
-## Author
+## 作者
 
 nanasess
