@@ -7,38 +7,36 @@ argument-hint: <review-comment-URL> [@mention-user]
 # レビューコメントへの返信
 
 GitHub PRのレビューコメントに対して適切な返信を作成・投稿します。
-複数の未返信コメントがある場合はまとめて一括処理します。
+**同一会話内で事前に validate-review で確認済みのコメントのみを返信対象とします。**
 
 ## 引数
 
 `$ARGUMENTS` から以下を解析:
-- レビューコメントURL: `https://github.com/{owner}/{repo}/pull/{pr_number}#discussion_r{comment_id}`
+- レビューコメントURL（オプション）: `https://github.com/{owner}/{repo}/pull/{pr_number}#discussion_r{comment_id}`
 - メンションユーザーID（オプション）: `@gemini-code-assist` 等
 
 ## 手順
 
-### 1. URL・引数解析
+### 1. 返信対象コメントの特定
 
-1. URLから `owner`, `repo`, `pr_number`, `comment_id` を抽出
-2. `@` で始まる文字列をメンションユーザーIDとして抽出
+**返信対象は、同一会話内で事前に validate-review（または手動で妥当性確認）を行ったコメントに限定する。**
+
+1. URLが引数で指定されている場合:
+   - URLから `owner`, `repo`, `pr_number`, `comment_id` を抽出
+   - そのコメント単体を対象とする
+2. URLが引数で指定されていない場合:
+   - 同一会話内で validate-review を実行済みのコメントを対象とする
+   - validate-review を実行していないコメントには返信しない
+   - 対象コメントがない場合は「返信対象のコメントがありません。先に validate-review で確認してください」と報告して終了
+3. `@` で始まる文字列をメンションユーザーIDとして抽出
 
 ### 2. コメント情報の取得
 
-1. 指定されたコメントの詳細を取得:
+対象コメントそれぞれについて:
+1. コメントの詳細を取得:
    `gh api repos/{owner}/{repo}/pulls/comments/{comment_id}`
-2. PR内の全コメントを取得:
+2. 必要に応じてスレッド構造を確認:
    `gh api repos/{owner}/{repo}/pulls/{pr_number}/comments --paginate`
-3. PR内の全レビューを取得:
-   `gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews`
-
-### 3. 未返信コメントの特定
-
-1. `in_reply_to_id` フィールドでスレッド構造を構築
-2. メンションユーザーが指定されている場合:
-   - そのユーザーのトップレベルコメント（`in_reply_to_id` が null）を全て取得
-   - 各コメントのスレッドを確認し、まだ返信がないものを対象とする
-3. メンションユーザーが指定されていない場合:
-   - 指定された `comment_id` のコメント単体を対象とする
 
 ### 4. 対象コードの確認
 
