@@ -18,8 +18,8 @@ Conventional Commits v1.0.0 形式の日本語コミットメッセージを自�
    - `git status --porcelain` で変更を確認
    - 変更がある場合はそのリポジトリで作業を続行
 3. git リポジトリでない場合、または変更がない場合:
-   - `find . -maxdepth 2 -name ".git" -type d` でサブディレクトリ内の git リポジトリを走査
-   - 各リポジトリで `git -C <dir> status --porcelain` を実行して変更の有無を確認
+   - `find . -maxdepth 2 -name ".git" -type d` でサブディレクトリ内の git リポジトリを走査し、その親ディレクトリ（リポジトリルート）を特定
+   - 各リポジトリルートで `git -C <dir> status --porcelain` を実行して変更の有無を確認
    - 変更のあるリポジトリをリストアップ
 4. 変更のあるリポジトリが複数の場合:
    - 一覧を表示してユーザーに選択を求める

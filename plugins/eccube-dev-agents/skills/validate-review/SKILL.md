@@ -26,6 +26,7 @@ GitHub PRのレビューコメントURLからコメント内容を取得し、�
 - `path`: 対象ファイルパス
 - `diff_hunk`: 対象コードの差分
 - `line` / `original_line`: 行番号
+- `commit_id`: コメント対象のコミットSHA
 - `user.login`: コメント投稿者
 
 ### 3. 対象コードの理解
@@ -33,7 +34,7 @@ GitHub PRのレビューコメントURLからコメント内容を取得し、�
 1. `path` から対象ファイルを特定
 2. `diff_hunk` からコードの変更内容を把握
 3. ローカルに対象ファイルが存在する場合は Read ツールで前後のコンテキストを確認
-4. ファイルがローカルにない場合は `gh api repos/{owner}/{repo}/contents/{path}?ref={branch}` で取得
+4. ファイルがローカルにない場合は `gh api repos/{owner}/{repo}/contents/{path}?ref={commit_id}` で取得（`commit_id` はステップ2で取得済み）
 5. PR全体の変更内容も確認: `gh pr diff {pr_number} --repo {owner}/{repo}`
 
 ### 4. 妥当性判断
