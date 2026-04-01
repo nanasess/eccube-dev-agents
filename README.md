@@ -1,253 +1,64 @@
-# EC-CUBE Dev Agents
+# eccube-dev-agents
 
-**日本語:** EC-CUBE/Symfony開発に特化したAIエージェント、Gemini統合、GitHub自動化、Slack通知を備えた開発ツールキット。EC-CUBE/Symfony向けに最適化されていますが、あらゆる開発プロジェクトに適用可能です。
+Git ワークフロー自動化、GitHub レビュー管理、CI ログ分析の Skills を提供する Claude Code プラグイン。
 
-**English:** EC-CUBE/Symfony development toolkit with specialized AI agents, Gemini integration, GitHub automation, and Slack notifications. Optimized for EC-CUBE/Symfony but applicable to any development project.
+## Skills
 
-## 機能
+| Skill | 説明 | 使い方 |
+|-------|------|--------|
+| **commit** | Conventional Commits 形式の日本語コミットメッセージ自動生成 | `/commit` |
+| **commit-push-pr** | コミット + Push + PR作成（PRテンプレート対応） | `/commit-push-pr` |
+| **validate-review** | レビューコメントの妥当性検証 | `/validate-review <URL>` |
+| **reply-review** | レビューコメントへの一括返信 | `/reply-review <URL> [@user]` |
+| **github-logs-analyze** | GitHub Actions 失敗ログの解析 | `/github-logs-analyze <job-URL>` |
+| **plan** | Issue/PR からチェックリスト形式の実装計画を生成 | `/plan [issue-URL]` |
 
-### 🤖 専用AIエージェント
+### 特徴
 
-- **implementation-analyzer** - 仕様書、PR、コミット、ステージング済み変更を調査して実装状況を分析
-- **bug-investigator** - 詳細なエラーログ分析と体系的なデバッグでバグを調査
-- **log-analyzer** - GitHub Actions CI/CDログを分析してテスト失敗の根本原因を特定
-- **refactoring-expert** - コード品質の向上、DRY違反の特定、ベストプラクティスの適用
-
-### ⚡ カスタムコマンド
-
-#### 開発ワークフロー
-- **create-plan** - 自動生成されたファイル名でチェックリスト形式の実装計画を作成
-- **update-plan** - 進捗追跡付きで実装計画を更新
-- **load-plan** - 進捗状況と共に実装計画を読み込んで要約
-- **save-context** - 会話コンテキストを、自動生成される説明的なファイル名とタイムスタンプで保存 (例: `auth-feature-202510301730.md`)
-- **load-context** - `/clear` 後に作業を再開するために保存したコンテキストを読み込む (最新のコンテキストファイルを自動検出)
-
-#### GitHub統合
-- **github-check** - 自動番号抽出によるPR/Issue詳細の表示
-- **github-logs-analyze** - 失敗したGitHub Actionsジョブの分析
-- **generate-commit** - git diffからコミットメッセージを生成
-- **update-pr-description** - 変更内容に基づいてPR説明を自動更新
-- **create-pr** - テンプレートサポート、リモート同期チェック、引数解析によるPR作成
-
-#### AI検索
-- **gemini-search** - Google Gemini CLIを使用したWeb検索
-- **gemini** - カスタムプロンプトによる直接Gemini CLI操作
-
-### 🔔 Slack通知
-
-以下の自動通知をSlackに送信:
-- タスク完了通知 (Stopフック)
-- タスク確認通知 (Notificationフック)
-- AIによる会話内容の日本語要約をmrkdwn形式で送信
+- **複数リポジトリ対応**: 親ディレクトリから実行すると変更のあるサブリポジトリを自動検出
+- **PRテンプレート対応**: `.github/pull_request_template.md` を自動検出・適用
+- **ブランチ自動作成**: デフォルトブランチにいる場合に自動でフィーチャーブランチを作成
+- **レビュー管理**: レビューコメントの妥当性検証と一括返信
 
 ## 必要要件
 
-- **Gemini CLI** - `gemini` コマンドがPATHに含まれている必要があります
-- **GitHub CLI (gh)** - GitHub統合コマンド用
-- **jq** - フックコマンド用のJSONプロセッサ
-- **curl** - Slack webhook統合用
+- **GitHub CLI (gh)** - GitHub 統合に必須
 
 ## インストール
 
-### クイックスタート (推奨)
-
-GitHubから直接インストール:
-
 ```bash
-# GitHubマーケットプレイスを追加
+# GitHub からインストール
 claude plugin marketplace add nanasess/eccube-dev-agents
-
-# プラグインをインストール
 claude plugin install eccube-dev-agents
 ```
 
-**Claude Codeを再起動**してプラグインを有効化してください。
-
-### 代替方法: ローカル開発インストール
-
-プラグイン開発やローカル変更のテスト用:
+### ローカル開発
 
 ```bash
-# リポジトリをローカルディレクトリにクローン
-git clone https://github.com/nanasess/eccube-dev-agents.git /path/to/local/eccube-dev-agents
-
-# ローカルマーケットプレイスを追加
-# 注意: .claude-plugin/marketplace.json を含むリポジトリルートディレクトリを指定
-claude plugin marketplace add /path/to/local/eccube-dev-agents
-
-# プラグインをインストール
+git clone https://github.com/nanasess/eccube-dev-agents.git
+claude plugin marketplace add /path/to/eccube-dev-agents
 claude plugin install eccube-dev-agents
 ```
-
-リポジトリはネストされた構造を使用しており、実際のプラグインコンテンツは `plugins/eccube-dev-agents/` サブディレクトリにあります。ルートにあるmarketplace.jsonがこのレイアウトを設定しています。
-
-### 環境設定
-
-Slack通知を機能させるには、Slack webhook URLを設定してください:
-
-```bash
-export ECCUBE_DEV_AGENTS_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-```
-
-これを `~/.bashrc` または `~/.zshrc` に追加すると永続化されます。
-
-## 使用方法
-
-### エージェントの使用
-
-```bash
-# 実装状況を分析
-"implementation-analyzer エージェントを使用して現在の実装を分析してください"
-
-# バグを調査
-"bug-investigator エージェントを使用してこのエラーの根本原因を見つけてください"
-
-# CIログを分析
-"log-analyzer エージェントを使用してこの失敗したGitHub Actionsの実行を分析してください"
-
-# コードをリファクタリング
-"refactoring-expert エージェントを使用してこのコードをリファクタリングしてください"
-```
-
-### コマンドの使用
-
-#### 開発ワークフローコマンド
-
-```bash
-# 実装計画を作成 (コンテキストからファイル名を自動生成)
-/create-plan
-# → .ai-agent/plans/ に保存
-
-# 特定のファイル名で計画を作成
-/create-plan authentication-feature-plan.md
-# → .ai-agent/plans/authentication-feature-plan.md に保存
-
-# 実装計画を更新 (.ai-agent/plans/ 内の *-plan.md ファイルを自動検索)
-/update-plan
-
-# 特定の計画を更新
-/update-plan authentication-feature-plan.md
-
-# 実装計画を読み込む (.ai-agent/plans/ 内を検索)
-/load-plan authentication-feature-plan.md
-
-# クリア前に会話コンテキストを保存 (ファイル名を自動生成)
-/save-context
-# → 例: .ai-agent/sessions/auth-feature-202510301730.md
-
-# またはカスタムファイル名を指定
-/save-context my-work.md
-# → .ai-agent/sessions/my-work.md に保存
-
-# 保存したコンテキストを読み込んで作業を再開 (.ai-agent/sessions/ 内の最新ファイルを自動検出)
-/load-context
-
-# またはファイル名を明示的に指定
-/load-context auth-feature-202510301730.md
-```
-
-**ファイル構成:**
-- コンテキストファイル: `.ai-agent/sessions/`
-- 実装計画: `.ai-agent/plans/`
-- 両ディレクトリは必要時に自動作成されます
-
-**典型的なワークフロー:**
-```bash
-1. /create-plan feature-plan.md      # 計画を作成 → .ai-agent/plans/feature-plan.md
-2. [実装作業]                          # コーディング、テストなど
-3. /update-plan                       # 進捗を更新
-4. /save-context                      # 保存 → .ai-agent/sessions/feature-202511130924.md
-5. /clear                             # コンテキストをクリア
-6. /load-context                      # 復元 (.ai-agent/sessions/ 内の最新を自動検出)
-7. /load-plan feature-plan.md        # 計画を確認 (.ai-agent/plans/feature-plan.md)
-8. [作業を続ける]                      # 実装を再開
-```
-
-#### GitHub統合コマンド
-
-```bash
-# GitHub PRを確認
-/github-check #450
-
-# 失敗したCIを分析
-/github-logs-analyze <job-id>
-
-# コミットメッセージを生成
-/generate-commit
-
-# PR説明を更新
-/update-pr-description
-
-# プルリクエストを作成
-/create-pr
-
-# オプション付きでPRを作成
-/create-pr --repo upstream/repo --base develop
-/create-pr --draft
-```
-
-#### AI検索コマンド
-
-```bash
-# Web検索
-/gemini-search 最新のEC-CUBE 4.2機能
-
-# 直接Gemini操作
-/gemini DoctrineとEloquentの違いを説明してください
-```
-
-## 設定
-
-### フックのカスタマイズ
-
-`hooks/hooks.json` を編集して通知動作をカスタマイズ:
-
-- 異なる要約スタイルのためにGeminiプロンプトを変更
-- Slackメッセージ形式を変更
-- 他のイベント用の追加フックを追加
-
-### Gemini CLIのセットアップ
-
-`gemini` コマンドがPATHで利用可能であることを確認してください。カスタムの場所にインストールされている場合:
-- PATHに追加: `export PATH="$PATH:/path/to/gemini"`
-- またはシンボリックリンクを作成: `ln -s /path/to/gemini/bin/gemini /usr/local/bin/gemini`
 
 ## 構造
 
 ```
 eccube-dev-agents/
 ├── .claude-plugin/
-│   └── marketplace.json              # ローカルマーケットプレイス設定
-├── plugins/eccube-dev-agents/        # プラグインコンテンツ
+│   └── marketplace.json
+├── plugins/eccube-dev-agents/
 │   ├── .claude-plugin/
-│   │   └── plugin.json               # プラグインメタデータ
-│   ├── agents/                       # AIエージェント定義
-│   │   ├── implementation-analyzer.md
-│   │   ├── bug-investigator.md
-│   │   ├── log-analyzer.md
-│   │   └── refactoring-expert.md
-│   ├── commands/                     # カスタムスラッシュコマンド
-│   │   ├── create-plan.md
-│   │   ├── update-plan.md
-│   │   ├── load-plan.md
-│   │   ├── save-context.md
-│   │   ├── load-context.md
-│   │   ├── gemini-search.md
-│   │   ├── gemini.md
-│   │   ├── github-check.md
-│   │   ├── github-logs-analyze.md
-│   │   ├── generate-commit.md
-│   │   ├── update-pr-description.md
-│   │   └── create-pr.md
-│   └── hooks/
-│       └── hooks.json                # イベントフック設定
-├── CLAUDE.md                          # プラグイン開発ガイド
+│   │   └── plugin.json
+│   └── skills/
+│       ├── commit/SKILL.md
+│       ├── commit-push-pr/SKILL.md
+│       ├── validate-review/SKILL.md
+│       ├── reply-review/SKILL.md
+│       ├── github-logs-analyze/SKILL.md
+│       └── plan/SKILL.md
+├── CLAUDE.md
 └── README.md
 ```
-
-## コントリビューション
-
-IssueやPull Requestを歓迎します!改善へのご協力をお待ちしています。
 
 ## ライセンス
 
