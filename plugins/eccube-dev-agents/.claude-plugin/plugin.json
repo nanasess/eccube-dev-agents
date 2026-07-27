@@ -1,7 +1,7 @@
 {
   "name": "eccube-dev-agents",
   "description": "Git workflow automation, GitHub review management, and CI log analysis toolkit for development projects",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "nanasess"
   },

@@ -15,10 +15,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 提供する Skills:
 1. **commit** - Conventional Commits 形式の日本語コミットメッセージ自動生成。複数リポジトリ対応
 2. **commit-push-pr** - コミット + Push + PR作成の一括実行。PRテンプレート自動適用対応
-3. **validate-review** - GitHub レビューコメントの妥当性検証
-4. **reply-review** - GitHub レビューコメントへの一括返信
-5. **github-logs-analyze** - GitHub Actions 失敗ログの解析
-6. **plan** - Issue/PR からチェックリスト形式の実装計画を生成
+3. **review-pr** - PR をレビューし、投稿せずにインラインコメントのドラフトを提示
+4. **post-review** - 確認済みドラフトを個別インラインコメントとして投稿
+5. **validate-review** - GitHub レビューコメントの妥当性検証
+6. **reply-review** - GitHub レビューコメントへの一括返信
+7. **github-logs-analyze** - GitHub Actions 失敗ログの解析
+8. **plan** - Issue/PR からチェックリスト形式の実装計画を生成
+
+### レビュー系 Skill の設計原則
+
+`review-pr` と `post-review` は「確認前に投稿しない」ことを構造で担保するために分離されている。統合や、`review-pr` への投稿処理の追加はこの担保を壊すため行わない。
+
+- `review-pr`: GitHub への POST を一切行わない（読み取り専用の `gh` のみ）
+- `post-review`: 同一会話内で `review-pr` が作成したドラフトのみを投稿対象とする
+- 指摘には `file:line` の根拠と `[VERIFIED]` / `[ASSUMED]` を付け、根拠のないものはドラフトに載せない
+
+同じ「事前確認」の関係が `validate-review` → `reply-review` にもある。
 
 ### Skill 設計パターン
 
