@@ -10,8 +10,8 @@ Git ワークフロー自動化、GitHub レビュー管理、CI ログ分析の
 | **commit-push-pr** | コミット + Push + PR作成（PRテンプレート対応） | `/commit-push-pr` |
 | **review-pr** | PR をレビューし、投稿せずにドラフトを提示 | `/review-pr <PR-URL> [追加観点]` |
 | **post-review** | 確認済みドラフトを個別インラインコメントとして投稿 | `/post-review [approve] [1,3]` |
-| **validate-review** | レビューコメントの妥当性検証 | `/validate-review <URL>` |
-| **reply-review** | レビューコメントへの一括返信 | `/reply-review <URL> [@user]` |
+| **validate-review** | レビューコメントの妥当性検証（引数なし = 現在ブランチの PR の全コメント） | `/validate-review [URL]` |
+| **reply-review** | 確認済みレビューコメントへの一括返信 | `/reply-review [URL] [@user]` |
 | **github-logs-analyze** | GitHub Actions 失敗ログの解析 | `/github-logs-analyze <job-URL>` |
 | **plan** | Issue/PR からチェックリスト形式の実装計画を生成 | `/plan [issue-URL]` |
 
@@ -42,6 +42,26 @@ Git ワークフロー自動化、GitHub レビュー管理、CI ログ分析の
 - 各指摘には `file:line` の根拠と `[VERIFIED]` / `[ASSUMED]` の検証状態を付ける
 - 根拠のない指摘はドラフトに載せない
 - `review-pr` は GitHub への POST を一切行わない
+
+### レビューコメント対応の流れ
+
+```
+/validate-review
+  → 現在ブランチの PR を特定し、未解決レビューコメントを全件検証（投稿しない）
+     | # | ファイル:行 | 投稿者 | 判定 | 概要 |
+     | 1 | src/Eccube/Service/Foo.php:65 | gemini-code-assist | 妥当 | ... |
+     | 2 | app/config/.../eccube.yaml:56 | gemini-code-assist | 非妥当 | ... |
+
+「内容を確認、この方針で返信して」
+
+/reply-review @gemini-code-assist
+  → 検証済みコメントそれぞれのスレッドに個別返信を投稿
+```
+
+- 引数なし、または PR URL / PR 番号のみを渡すと、その PR のレビューコメントを全件検証する
+- レビューコメント URL (`#discussion_r...`) を渡すとその 1 件のみを検証する
+- 解決済みスレッドと PR 作成者自身のコメントはスキップし、スキップ理由も報告する
+- `validate-review` は GitHub への書き込みを一切行わない。返信は `reply-review` で確認後に投稿する
 
 ## 必要要件
 
