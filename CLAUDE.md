@@ -17,8 +17,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **commit-push-pr** - コミット + Push + PR作成の一括実行。PRテンプレート自動適用対応
 3. **review-pr** - PR をレビューし、投稿せずにインラインコメントのドラフトを提示
 4. **post-review** - 確認済みドラフトを個別インラインコメントとして投稿
-5. **validate-review** - GitHub レビューコメントの妥当性検証
-6. **reply-review** - GitHub レビューコメントへの一括返信
+5. **validate-review** - GitHub レビューコメントの妥当性検証（引数なし = 現在ブランチの PR の全コメント、PR URL 指定 = その PR の全コメント、コメント URL 指定 = 単一）
+6. **reply-review** - 確認済み GitHub レビューコメントへの一括返信
 7. **github-logs-analyze** - GitHub Actions 失敗ログの解析
 8. **plan** - Issue/PR からチェックリスト形式の実装計画を生成
 
@@ -31,6 +31,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 指摘には `file:line` の根拠と `[VERIFIED]` / `[ASSUMED]` を付け、根拠のないものはドラフトに載せない
 
 同じ「事前確認」の関係が `validate-review` → `reply-review` にもある。
+
+- `validate-review`: GitHub への書き込みを一切行わない。引数なし / PR URL 指定では対象 PR のレビューコメントを全件検証し、判定と対応方針を一覧報告する
+- `reply-review`: 同一会話内で `validate-review` が確認したコメントのみに、スレッドごと個別に返信する
 
 ### Skill 設計パターン
 
