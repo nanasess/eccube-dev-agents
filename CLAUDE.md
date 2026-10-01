@@ -68,6 +68,26 @@ claude plugin marketplace add /path/to/eccube-dev-agents
 claude plugin install eccube-dev-agents
 ```
 
+### バージョン更新とリリース
+
+Skill の追加・変更をインストール済み環境に届けるには、バージョンを上げる必要がある。バージョンが同じだと `claude plugin update` が「最新」と判定し、キャッシュ (`plugins/cache/<marketplace>/eccube-dev-agents/<version>/`) が更新されない。
+
+1. `plugins/eccube-dev-agents/.claude-plugin/plugin.json` と `.claude-plugin/marketplace.json` の `version` を同じ値に揃えて上げる (SemVer。Skill の廃止など互換性を壊す変更は major、Skill の追加・機能追加は minor、修正のみは patch)
+2. バージョン更新の PR がマージされたら、**必ず GitHub リリースを作成する**。タグを付け忘れると、後からバージョンとコミットの対応が追えなくなる
+
+```bash
+# マージコミットのフル SHA を target に指定する (短縮 SHA は target_commitish として拒否される)
+gh release create v<version> \
+  --target $(git rev-parse <バージョン更新 PR のマージコミット>) \
+  --title "v<version> - <変更の要約>" \
+  --notes-file <リリースノート> \
+  --latest
+```
+
+- リリースノートは日本語で、前回リリースからの PR を機能ごとにまとめ、末尾に PR 番号と `**Full Changelog**: https://github.com/nanasess/eccube-dev-agents/compare/v<前回>...v<今回>` を付ける
+- 破壊的変更がある場合は「⚠️ 破壊的変更」セクションを先頭に置く
+- 作成後に `gh release list` で、今回のリリースが `Latest` になっていることを確認する
+
 ### 配布とインストール
 
 ネストされた構造を使用:
