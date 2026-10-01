@@ -157,20 +157,34 @@ gh pr diff {pr_number} --repo {owner}/{repo}
 
 #### 6-1. 前提確認
 
+PR の head（リポジトリ・ブランチ・コミット）と、ローカルの checkout と push 先を照合する:
+
 ```bash
 pwd
-git remote -v
-git branch --show-current
 git status --porcelain
-gh pr view {pr_number} --repo {owner}/{repo} --json headRefName,state,isCrossRepository,maintainerCanModify
+git branch --show-current
+gh pr view {pr_number} --repo {owner}/{repo} \
+  --json state,headRefName,headRefOid,headRepository,headRepositoryOwner,isCrossRepository,maintainerCanModify
+# upstream の remote 名とブランチ（例: origin/feature-x）
+git rev-parse --abbrev-ref --symbolic-full-name @{upstream}
+git remote get-url <upstream の remote 名>
+git fetch <upstream の remote 名>
+git rev-parse HEAD
 ```
+
+PR の head リポジトリは `{headRepositoryOwner.login}/{headRepository.name}` とする。upstream の remote URL（`https://github.com/<owner>/<repo>(.git)` / `git@github.com:<owner>/<repo>(.git)`）から `<owner>/<repo>` を取り出して比較する。
 
 以下のいずれかに該当する場合は**自動対応を中止**し、全件を要確認に回して理由を報告する:
 
-- 現在ブランチが PR の `headRefName` と一致しない（別ブランチ・別リポジトリでの修正を防ぐ）
-- 作業ツリーに未コミットの変更がある（ユーザーの作業と修正が混ざるのを防ぐ）
 - PR が `OPEN` でない
+- 作業ツリーに未コミットの変更がある（ユーザーの作業と修正が混ざるのを防ぐ）
+- 現在ブランチに upstream が設定されていない
+- upstream の remote URL が指すリポジトリが PR の head リポジトリと一致しない（同名ブランチを持つ別リポジトリを修正・push するのを防ぐ）
+- upstream のブランチ名が PR の `headRefName` と一致しない
+- ローカルの `HEAD` が PR の `headRefOid` と一致しない（未 push のコミットを巻き込んで push する、または古いコードを修正するのを防ぐ）
 - PR の head がフォークで、push 権限がない
+
+ここで照合した remote 名と `headRefName` を、手順 6-4 の push 先として使う。
 
 #### 6-2. 修正
 
@@ -183,7 +197,8 @@ gh pr view {pr_number} --repo {owner}/{repo} --json headRefName,state,isCrossRep
 プロジェクトの規約（`CLAUDE.md`, `package.json`, `composer.json`, `Makefile`, CI 設定など）から lint / 型チェック / テストのコマンドを特定し、**修正したファイルに関係するもの**を実行する。
 
 - 検証が失敗し、原因が今回の修正にある場合は修正し直す。直せない場合はその指摘の修正を `git restore` で取り消し、要確認に回す
-- 検証手段がない場合は「未検証」と明記したうえで続行する（推測で「検証済み」と書かない）
+- lint / テストが存在しない（ドキュメントや設定のみの変更など）場合は、修正後のファイルを読み直して指摘が解消されたことを確認し、その根拠（確認した `file:line`）を報告に記載する
+- 実行できる検証もコードを読んでの確認もできない修正は、`git restore` で取り消して要確認に回す（未検証のままコミット・push しない）
 
 #### 6-4. コミットと push
 
@@ -191,12 +206,13 @@ gh pr view {pr_number} --repo {owner}/{repo} --json headRefName,state,isCrossRep
 git add <修正したファイルを個別に指定>   # git add -A / git add . は使わない
 git diff --staged
 git commit -m "<Conventional Commits 形式・日本語のメッセージ>"
-git push
+git push <6-1 で照合した remote 名> HEAD:<headRefName>
 ```
 
 - コミットメッセージは `/eccube-dev-agents:commit` と同じ規約（Conventional Commits + 日本語本文）に従う。本文には対応したレビューコメントの要約を箇条書きで含める
 - 自動対応の指摘はまとめて 1 コミットにする（指摘ごとに分けない）
 - `.env` や認証情報を含むファイルがステージされていないか `git diff --staged` で確認する
+- 引数なしの `git push` は使わず、6-1 で PR の head と一致を確認した remote と ref を明示して push する
 - push が失敗した場合（non-fast-forward 等）は force push せず、返信も行わずに状況を報告して終了する
 
 #### 6-5. 返信
