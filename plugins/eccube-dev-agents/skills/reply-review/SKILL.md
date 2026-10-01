@@ -36,6 +36,7 @@ GitHub PR のレビューコメントに対して適切な返信を作成・投�
 6. `@` で始まる文字列をメンションユーザー ID として抽出
 
 validate-review が「判定保留」としたコメントは返信対象から外し、報告でその旨を明記する。
+validate-review の自動対応（修正・返信済み）で既に返信したコメントも対象から外す（二重返信を防ぐ）。ユーザーが要確認項目に回答した内容（修正方針・返信方針）がある場合は、validate-review の対応方針よりそちらを優先する。
 
 ### 2. コメント情報の取得
 
@@ -85,6 +86,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
 
 ### 返信しなかったコメント
 - [src/Baz.php:5] — validate-review で判定保留
+- [src/Qux.php:7] — validate-review の自動対応で返信済み
 
 合計: N 件の返信を投稿しました
 ```
